@@ -40,8 +40,8 @@ def create_project(project_name, template="default"):
     Create the project
     """
     project_dir = get_project_dir_path(project_name)
-    server_file = "%s/%s/run.py" % (CWD, project_name)
-    server_tpl = pkg_resources.resource_string(__name__, '%s/run.py.tpl' % (PROJECTS_TEMPLATES))
+    server_file = "%s/server_%s.py" % (CWD, project_name)
+    server_tpl = pkg_resources.resource_string(__name__, '%s/server.py.tpl' % (PROJECTS_TEMPLATES))
     requirements_txt = "%s/requirements.txt" % CWD
 
     if not os.path.isdir(project_dir):
@@ -73,7 +73,7 @@ def main():
             template = "default"
             create_project(project_name, template)
             print("Flask-Pilot '%s' project created successfully " % project_name)
-            print("Run %s/server.py to start the server" % project_name)
+            print("Run server_%s.py to start the server" % project_name)
 
     except Exception as ex:
         print("ERROR: %s " % ex.__repr__())

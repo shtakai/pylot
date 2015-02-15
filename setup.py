@@ -14,10 +14,10 @@ https://github.com/mardix/flask-pilot
 from setuptools import setup, find_packages
 
 __NAME__ = "Flask-Pilot"
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __author__ = "Mardix"
 __license__ = "MIT"
-__copyright__ = "(c) 2014 Mardix"
+__copyright__ = "(c) 2015 Mardix"
 
 
 setup(
@@ -28,7 +28,7 @@ setup(
     author_email='mardix@github.com',
     description="Flask-Pilot is a Flask extension that adds structure and map your views and templates together for rapid application development",
     long_description=__doc__,
-    url='http://mardix.github.io/flask-pilot/',
+    url='https://github.com/mardix/flask-pilot/',
     download_url='http://github.com/mardix/flask-pilot/tarball/master',
     py_modules=['flask_pilot'],
     entry_points=dict(console_scripts=['flask-pilot=flask_pilot.cmd:main']),
@@ -56,6 +56,7 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Topic :: Software Development :: Libraries :: Python Modules'
     ],

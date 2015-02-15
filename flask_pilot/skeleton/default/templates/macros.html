@@ -65,10 +65,10 @@ Place your macros in here
 {% endmacro %}
 
 
-#---- flashed_messages() -------------------------------------------------------
+#---- show_flashed_messages() -------------------------------------------------------
 # Render the flashed messages set
-{% macro flashed_messages(dismissible=True) %}
-    {% for category, message in __flashed_messages__ %}
+{% macro show_flashed_messages(dismissible=True) %}
+    {% for category, message in get_flashed_messages(with_categories=True) %}
         <div class="alert
             alert-{{category|replace('error', 'danger')}}
             {% if dismissible %}alert-dismissible{%endif%}

@@ -10,12 +10,14 @@ class Index(Pilot):
     route_base = "/"
 
     def index(self):
-        self._(page_title="Hello Flask Pilot!")
+        self.__(page_title="Hello Flask Pilot!")
         return self.render()
 
 class Example(Pilot):
     def index(self):
-        self._(page_title="Example Page")
+        self.__(page_title="Example Page")
+        flash_error("This is an error message set by flash_error() and called with show_flashed_message()")
+        flash_success("This is a success message set by flash_error() and called with show_flashed_message()")
         return self.render()
 
 class Error(Pilot):

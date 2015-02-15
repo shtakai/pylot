@@ -3,7 +3,6 @@ Flask-Pilot
 
 """
 
-import os
 from flask import render_template, request, flash, get_flashed_messages
 from werkzeug.contrib.fixers import ProxyFix
 from flask.ext.classy import FlaskView, route  # flask-classy
@@ -12,10 +11,10 @@ import inspect
 
 # ------------------------------------------------------------------------------
 NAME = "Flask-Pilot"
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __author__ = "Mardix"
 __license__ = "MIT"
-__copyright__ = "(c) 2014 Mardix"
+__copyright__ = "(c) 2015 Mardix"
 
 # ------------------------------------------------------------------------------
 
@@ -101,8 +100,43 @@ class Pilot(FlaskView):
     _app = None
     _bind_app = set()
     _set_cookie_ = None
-    _view_context = dict()
-    _UTILITY_PAGE_INFO = dict()
+    _global_view_context = dict()
+
+    @classmethod
+    def init(cls, app, directory=None, config=None):
+        """
+        Allow to register all subclasses of Pilot
+        So we call it once initiating
+        :param app: Flask instance
+        :param directory: The directory containing your project's Views, Templates and Static
+        :param config: string of config object. ie: "app.config.Dev"
+        """
+
+        app.wsgi_app = ProxyFix(app.wsgi_app)
+
+        if config:
+            app.config.from_object(config)
+
+        app.template_folder = directory + "/templates"
+        app.static_folder = directory + "/static"
+
+        cls._app = app
+        cls.assets = Environment(cls._app)
+
+        for _app in cls._bind_app:
+            _app(cls._app)
+
+        for subcls in cls.__subclasses__():
+            subcls.register(cls._app)
+
+        @app.after_request
+        def after_request(response):
+            # Set the cookie on response
+            if cls._set_cookie_:
+                response.set_cookie(**cls._set_cookie_)
+            return response
+
+        return app
 
     @classmethod
     def bind(cls, app):
@@ -115,64 +149,22 @@ class Pilot(FlaskView):
         cls._bind_app.add(app)
 
     @classmethod
-    def init(cls, app, config=None, project_dir=None, proxyfix=True):
-        """
-        Allow to register all subclasses of Pilot
-        So we call it once initiating
-        :param app: The app
-        :param config: string of config object. ie: "app.config.Dev"
-        :param project_dir: The directory containing your project's Views, Templates and Static
-        :param proxyfix:
-        """
-
-        if not project_dir:
-            project_dir = os.getcwd()
-
-        if config:
-            app.config.from_object(config)
-
-        if proxyfix:
-            app.wsgi_app = ProxyFix(app.wsgi_app)
-
-        cls._app = app
-        cls.assets = Environment(app)
-
-        app.template_folder = project_dir + "/templates"
-        app.static_folder = project_dir + "/static"
-
-        for _app in cls._bind_app:
-            _app(app)
-
-        for subcls in cls.__subclasses__():
-            subcls.register(app)
-
-        @app.after_request
-        def after_request(response):
-            # Set the cookie on response
-            if cls._set_cookie_:
-                response.set_cookie(**cls._set_cookie_)
-            return response
-
-        return app
-
-    @classmethod
     def get_config(cls, key, default=None):
         """
         Shortcut to access the config in your class
         :param key: The key to access
-        :param default: The edfault value when None
+        :param default: The default value when None
         :returns mixed:
         """
         return cls._app.config.get(key, default)
 
     @classmethod
-    def _(cls, **kwargs):
+    def __(cls, **kwargs):
         """
-        Set view context to be available in the whole context
-        It usually set a specific context once
+        Assign a global view context to be used in the template
         :params **kwargs:
         """
-        cls._view_context.update(kwargs)
+        cls._global_view_context.update(kwargs)
 
     @classmethod
     def render(cls, data={}, view_template=None, layout=None, **kwargs):
@@ -195,12 +187,11 @@ class Pilot(FlaskView):
 
         if not data:
             data = dict()
-        if cls._view_context:
-            data["_"] = cls._view_context
+        if cls._global_view_context:
+            data["__"] = cls._global_view_context
         if kwargs:
             data.update(kwargs)
 
-        data["__flashed_messages__"] = get_flashed_messages(with_categories=True)
         data["__view_template__"] = view_template
 
         return render_template(layout or cls.LAYOUT, **data)

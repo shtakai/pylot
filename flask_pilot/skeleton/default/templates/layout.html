@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>{{ _.page_title | safe }}</title>
+        <title>{{ __.page_title | safe }}</title>
 
         {% assets output="all_css.css",
             "vendor/font-awesome/css/font-awesome.min.css",
@@ -51,7 +51,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    {{- macros.flashed_messages() -}}
+                    {{- macros.show_flashed_messages() -}}
                 </div>
             </div>
 
