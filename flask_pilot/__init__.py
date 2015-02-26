@@ -11,7 +11,7 @@ import inspect
 
 # ------------------------------------------------------------------------------
 NAME = "Flask-Pilot"
-__version__ = "0.2.0"
+__version__ = "0.4.0"
 __author__ = "Mardix"
 __license__ = "MIT"
 __copyright__ = "(c) 2015 Mardix"
@@ -185,10 +185,8 @@ class Pilot(FlaskView):
                 view_name = view_name[:-4]
             view_template = "%s/%s.html" % (view_name, action_name)
 
-        if not data:
-            data = dict()
-        if cls._global_view_context:
-            data["__"] = cls._global_view_context
+        data = data if data else dict()
+        data["__"] = cls._global_view_context if cls._global_view_context else {}
         if kwargs:
             data.update(kwargs)
 

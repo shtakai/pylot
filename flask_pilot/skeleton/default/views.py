@@ -56,5 +56,5 @@ class Error(Pilot):
 
     @classmethod
     def index(cls, error, code):
-        cls._(page_title="Error %s" % code)
+        cls.__(page_title="Error %s" % code)
         return cls.render(error=error), code

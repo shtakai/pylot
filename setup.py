@@ -14,7 +14,7 @@ https://github.com/mardix/flask-pilot
 from setuptools import setup, find_packages
 
 __NAME__ = "Flask-Pilot"
-__version__ = "0.2.0"
+__version__ = "0.4.0"
 __author__ = "Mardix"
 __license__ = "MIT"
 __copyright__ = "(c) 2015 Mardix"
@@ -40,7 +40,8 @@ setup(
         'Flask-Assets==0.10',
         'Flask-Mail==0.9.1',
         'Flask-WTF==0.11',
-        'Active-SQLAlchemy==0.3.2'
+        'Active-SQLAlchemy==0.3.2',
+        'flask-recaptcha==0.3'
     ],
 
     keywords=['flask', 'templates', 'views', 'classy', 'pilot', 'framework', "mvc", "blueprint"],

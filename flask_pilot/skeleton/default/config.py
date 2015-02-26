@@ -49,6 +49,11 @@ class BaseConf(object):
     # Flask-SQLAlchemy : http://pythonhosted.org/Flask-SQLAlchemy/config.html
     SQLALCHEMY_DATABASE_URI = None
 
+    # Flask-ReCaptcha
+    RECAPTCHA_SITE_KEY = ""
+    RECAPTCHA_SECRET_KEY = ""
+
+
 class Dev(BaseConf):
     """
     Development configuration
