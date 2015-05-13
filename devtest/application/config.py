@@ -25,14 +25,14 @@ class Config(object):
 
     # AWS Credentials
     # For: S3, SES Mailer, flask s3
-    AWS_ACCESS_KEY_ID = "AKIAIJ66SVCZPD4F3P6A"
-    AWS_SECRET_ACCESS_KEY = "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"
+    AWS_ACCESS_KEY_ID = ""
+    AWS_SECRET_ACCESS_KEY = ""
     AWS_S3_BUCKET_NAME = "yoredis"
 
 # ------- DATABASES ------------
 
     # SQLAlchemy
-    DATABASE_URI = "mysql+pymysql://root:mysqlAdminPass10@db-01.xnode.io:3306/test_pylot" #"sqlite://///Users/mardochee.macxis/Projects/Python/flask-pilot/test/app.db"
+    DATABASE_URI = "" #"sqlite://///Users/mardochee.macxis/Projects/Python/flask-pilot/test/app.db"
 
     # REDIS
     REDIS_URI = None
@@ -135,8 +135,8 @@ class Config(object):
 
     # Flask-ReCaptcha
     # https://github.com/mardix/flask-recaptcha
-    RECAPTCHA_SITE_KEY = "6LchGgITAAAAAG-5mgaxR-5QFwtxt1OByvdOkQJV"
-    RECAPTCHA_SECRET_KEY = "6LchGgITAAAAAIHo1JDof2SFOaqD9YEFzwMb5w77"
+    RECAPTCHA_SITE_KEY = ""
+    RECAPTCHA_SECRET_KEY = ""
 
     # Google Analytics
     GOOGLE_ANALYTICS_ID = ""
@@ -171,7 +171,7 @@ class Config(object):
 
     # Contact
     # Email address for the contact page receipient
-    CONTACT_PAGE_EMAIL_RECIPIENT = "mcx2082@gmail.com"
+    CONTACT_PAGE_EMAIL_RECIPIENT = ""
 
 
 class Development(Config):
