@@ -1,0 +1,161 @@
+"""
+Pylot's macro
+"""
+
+{#:: oauth_login_buttons
+    Turn a list of with buttons name into a social login button
+::#}
+{% macro oauth_login_buttons(buttons, size="md", text="Signin with #provider") %}
+    {% for button in buttons %}
+        {% set name = button %}
+        {% if button == "google" %}
+            {% set button = "google-plus" %}
+        {% endif %}
+        {% set text = text.replace("#provider", name) %}
+
+        {{ oauth_login_button(button, text, size) }}
+    {% endfor %}
+{% endmacro %}
+
+
+{#:: oauth_login_button
+    Create a social login button
+::#}
+{% macro oauth_login_button(button, text, size="") %}
+    <a pylot:oauth-login="{{ button }}"
+       class="btn btn-social btn-{{ button }} btn-{{ size }} oauth-login" >
+      <i class="fa fa-{{ button }}"></i>
+      {{ text | title }}
+    </a>
+{% endmacro %}
+
+
+{#:: static(url) ::#}
+{#:: Include static assets ::#}
+{%- macro static(url) -%}
+    {%- if not url.startswith('http') and not url.startswith('//')  -%}
+        {%- set url = url_for('static', filename=url) -%}
+    {%- endif -%}
+    {{- url | safe -}}
+{%- endmacro -%}
+
+
+{#:: css(file) ::#}
+{#:: include css files ::#}
+{%- macro css(file) -%}
+    <link href="{{ static(file) }}" rel="stylesheet">
+{%- endmacro -%}
+
+
+{#:: js(file) ::#}
+{#:: include js file ::#}
+{%- macro js(file) -%}
+    <script type="text/javascript" src="{{ static(file) }}"></script>
+{%- endmacro -%}
+
+
+{#:: img(file, attributes) ::#}
+{#:: Insert img tag ::#}
+{% macro img(file, attributes={}) %}
+    <img src="{{ static(file) }}"
+            {%- for k, v in attributes.items() %}
+                {{ k | safe}}="{{ v | safe}}"
+            {% endfor -%}
+            >
+{% endmacro %}
+
+{#::  google_analytics ::#}
+{#:: include google analytics tags ::#}
+{% macro google_analytics(code) %}
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', '{{ code }}', 'auto');
+	  ga('send', 'pageview');
+	</script>
+{% endmacro %}
+
+
+#---- flashed_messages() -------------------------------------------------------
+# Render the flashed messages set
+{% macro flashed_messages(dismissible=True) %}
+    {% for category, message in get_flashed_messages(with_categories=True) %}
+        <div class="alert
+            alert-{{category|replace('error', 'danger')}}
+            {% if dismissible %}alert-dismissible{%endif%}
+            " role="alert">
+            {% if dismissible %}
+             <button type="button" class="close" data-dismiss="alert">
+                 <span aria-hidden="true">&times;</span>
+                 <span class="sr-only">Close</span>
+             </button>
+            {%endif%}
+            {{message}}
+        </div>
+    {%endfor%}
+{% endmacro %}
+
+
+
+#---- alert() ----------------------------------------------------------
+{% macro alert(message, category="info", dismissible=True) %}
+    <div class="alert
+        alert-{{category|replace('error', 'danger')}}
+        {% if dismissible %}alert-dismissible{%endif%}
+        " role="alert">
+        {% if dismissible %}
+         <button type="button" class="close" data-dismiss="alert">
+             <span aria-hidden="true">&times;</span>
+             <span class="sr-only">Close</span>
+         </button>
+        {%endif%}
+        {{message}}
+    </div>
+{% endmacro %}
+
+
+#---- pagination() --------------------------------------------------------
+{% macro pagination(paginator, endpoint=None) %}
+    {% if not endpoint %}
+        {% set endpoint = request.endpoint %}
+    {% endif %}
+    {% if "page" in kwargs %}
+        {% set _ = kwargs.pop("page") %}
+    {% endif %}
+    <nav>
+        <ul class="pagination">
+          {%- if paginator.has_prev %}
+            <li><a href="{{ url_for(endpoint, page=paginator.prev_num, **kwargs) }}"
+             rel="me prev"><span aria-hidden="true">&laquo;</span></a></li>
+          {% else %}
+            <li class="disabled"><span><span aria-hidden="true">&laquo;</span></span></li>
+          {%- endif %}
+
+          {%- for page in paginator.pages %}
+            {% if page %}
+              {% if page != paginator.page %}
+                <li><a href="{{ url_for(endpoint, page=page, **kwargs) }}"
+                 rel="me">{{ page }}</a></li>
+              {% else %}
+                <li class="active"><span>{{ page }}</span></li>
+              {% endif %}
+            {% else %}
+              <li><span class=ellipsis>…</span></li>
+            {% endif %}
+          {%- endfor %}
+
+          {%- if paginator.has_next %}
+            <li><a href="{{ url_for(endpoint, page=paginator.next_num, **kwargs) }}"
+             rel="me next">»</a></li>
+          {% else %}
+            <li class="disabled"><span aria-hidden="true">&raquo;</span></li>
+          {%- endif %}
+        </ul>
+    </nav>
+{% endmacro %}
+
+
+

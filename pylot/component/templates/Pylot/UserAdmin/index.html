@@ -1,0 +1,131 @@
+{% import "Pylot/macros/base.html" as m with context %}
+{% import "Pylot/macros/forms.html" as f with context %}
+
+<h1 class="text-center">User Admin</h1>
+
+<div>
+    <div class="btn btn-info pull-right"
+            data-toggle="modal"
+            data-target="#modal-new-user"
+            data-id=""
+            data-name=""
+            data-description=""
+            data-per_hour=""
+            data-per_minute=""
+            ><i class="fa fa-plus"></i> New User</div>
+    <div class="clearfix"></div>
+</div>
+<br>
+
+<div class="well">
+
+<form class="form-inline" method="GET" action="{{url_for('UserAdmin:index')}}" role="form">
+
+  <div class="form-group">
+    <div class="input-group">
+      <input type="text" name="name" class="form-control"  placeholder="Name">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="input-group">
+      <input type="text" name="email" class="form-control" placeholder="Email">
+    </div>
+  </div>
+
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" name="show-deleted" value="1"> Show Deleted
+    </label>
+  </div>
+
+  <button type="submit" class="btn btn-default">Search</button>
+</form>
+</div>
+
+<div class="table-responsive">
+
+    <table class="table table-bordered">
+        <thead>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Signup Date</th>
+        </thead>
+
+        <tbody>
+
+            {% for user in __.user_admin.users %}
+
+                <tr class="{% if user.status != 'ACTIVE' %} warning {% endif %}">
+                    <td>{{user.id}}</td>
+                    <td><a href="{{url_for('UserAdmin:get', id=user.id)}}">{{user.name}}</a></td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.role}}</td>
+                    <td>{{user.status}}</td>
+                    <td>{{user.created_at}}</td>
+                </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+{{ m.pagination(__.user_admin.users, **__.user_admin.search_query) }}
+
+</div>
+
+<div class="modal fade" id="modal-new-user" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+
+  <form method="POST" action="{{url_for('UserAdmin:create')}}">
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Create New User</h4>
+      </div>
+      <div class="modal-body">
+
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" class="form-control"  name="name" placeholder="Name">
+            </div>
+
+            <div class="form-group">
+                <label>Email</label>
+                <input type="text" class="form-control"  name="email" placeholder="Email">
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" class="form-control"  name="password" placeholder="Password">
+            </div>
+
+            <div class="form-group">
+                <label>Confirm Password</label>
+                <input type="password" class="form-control"  name="password2" placeholder="Confirm Password">
+            </div>
+
+            <div class="form-group">
+                <label>User Role</label>
+
+
+            </div>
+
+
+      </div>
+
+      <div class="modal-footer">
+
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> CREATE</button>
+      </div>
+    </div>
+
+  </form>
+  </div>
+</div>

@@ -1,0 +1,34 @@
+{% import "Pylot/macros/base.html" as m with context %}
+
+{#:: Include the meta data ::#}
+{#% include "Pylot/includes/meta.html" %#}
+
+
+{#:: Pylot CSS & JS ::#}
+{%- assets "pylot_css" %}
+    <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}"></script>
+{% endassets -%}
+{%- assets "pylot_js" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+{% endassets -%}
+
+
+{#:: Google Analytics ::#}
+{%- if __.GOOGLE_ANALYTICS_ID %}
+    {{ m.google_analytics(__.GOOGLE_ANALYTICS_ID) }}
+{% endif -%}
+
+{#:: Init Pylot script ::#}
+<script>
+{% if __.LOGIN_ENABLED %}
+$(function(){
+    Pylot.basic_login()
+
+{#:: Social Login ::#}
+{%- if __.LOGIN_OAUTH_ENABLED and __.LOGIN_OAUTH_CLIENT_IDS %}
+    var _s_r = "{{url_for('Login:login')}}"
+    Pylot.oauth_login({{ __.LOGIN_OAUTH_CLIENT_IDS | tojson | safe }}, _s_r);
+{% endif -%}
+})
+{% endif %}
+</script>

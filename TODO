@@ -1,0 +1,51 @@
+
+Added CSRF for form on for PUT and UPDATE
+    - via decorators
+    @csrf
+    or decorators = [csrf]
+
+Features:
+    recaptcha
+    mailer
+
+
+Upload manager: Local, S3
+
+__csrf
+if csrf.is_valid():
+
+
+Pylot
+
+Create a Decision Made for You
+
+- [list of stuff added]
+
+- bcrypt is chosen as the password hasher
+
+- Session
+
+- User Admin
+
+- Post Manager
+
+- ORM: Active SQLAlchemy (SQLALchemy)
+
+- ReCaptcha
+
+- Deployapp
+
+-
+
+
+
+ref: http://go-bootstrap.io/
+
+PostgreSQL is chosen for the database.
+bcrypt is chosen as the password hasher.
+Bootstrap Flatly is chosen for the UI theme.
+Session is stored inside encrypted cookie.
+Static directory is located under /static.
+Model directory is located under /dal (Database Access Layer).
+It does not use ORM nor installs one.
+Test database is automatically created.

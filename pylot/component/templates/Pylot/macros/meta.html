@@ -1,0 +1,87 @@
+{% import "Pylot/macros/base.html" as m with context %}
+
+{% macro title(suffix) %}
+    <title>{{ __.META["title"] | safe }} {{ suffix | safe }}</title>
+{% endmacro %}
+
+{#: The basic meta tag :#}
+{% macro meta(name, value) %}
+    <meta name="{{ name }}" content="{{ value | safe }}">
+{% endmacro %}
+
+{#: Custom meta tag :#}
+{% macro custom(namespace, name, value) %}
+    <meta {{ namespace }}="{{ name }}" content="{{ value | safe }}">
+{% endmacro %}
+
+{#: Opengraph property :#}
+{% macro property(namespace, name, value) %}
+    <meta property="{{ namespace }}:{{ name }}" content="{{ value | safe }}">
+{% endmacro %}
+
+{#: Custom meta tag :#}
+{%- macro opengraph(name, value) -%}
+    {% if value %}
+    <meta property="og:{{ name }}" content="{{ value | safe }}">
+    {% endif %}
+{%- endmacro %}
+
+{#: Custom meta tag :#}
+{%- macro googleplus(name, value) -%}
+    {% if value %}
+    <meta itemprop="{{ name }}" content="{{ value | safe }}">
+    {% endif %}
+{%- endmacro -%}
+
+{#: Custom meta tag :#}
+{%- macro twitter(name, value) -%}
+    {% if value %}
+    <meta name="twitter:{{ name }}" content="{{ value | safe }}">
+    {% endif %}
+{%- endmacro -%}
+
+{#: Favicon :#}
+{% macro favicon(path) %}
+    <link rel="shortcut icon" href="{{- m.static(path) -}}">
+{% endmacro %}
+
+
+{%- macro social(use_opengraph=True, use_googleplus=True, use_twitter=True) -%}
+    {%- if __.META["use_opengraph"] and use_opengraph -%}
+        {%- set __meta = ["title", "url", "description", "image", "object_type", "site_name"] -%}
+        {% for _m in __meta -%}
+        {%- if _m == "object_type" -%}
+            {{- opengraph("type", __.META[_m]) -}}
+        {%- else -%}
+            {{- opengraph(_m, __.META[_m]) -}}
+        {%- endif -%}
+        {% endfor %}
+    {%- endif -%}
+
+    {%- if __.META["use_googleplus"] and use_googleplus -%}
+        {%- set __meta = ["title", "url", "description", "image"] -%}
+        {% for _m in __meta -%}
+        {%- if _m == "title" -%}
+            {{- googleplus("name", __.META[_m]) -}}
+        {%- else -%}
+            {{- googleplus(_m, __.META[_m]) -}}
+        {%- endif -%}
+        {% endfor %}
+    {%- endif -%}
+
+    {% if __.META["use_twitter"] and use_twitter -%}
+        {%- set __meta = ["title", "url", "description", "image"] -%}
+        {% for _m in __meta -%}
+        {{- twitter(_m, __.META[_m]) -}}
+        {% endfor %}
+    {%- endif -%}
+{%- endmacro -%}
+
+
+{%- macro header(title_="", favicon_="favicon.ico", charset="utf-8") -%}
+    <meta charset="{{ charset | safe }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{ title(title_) }}
+    {{ meta("description", __.META["description"]) }}
+    {{ favicon(favicon_) }}
+{%- endmacro -%}

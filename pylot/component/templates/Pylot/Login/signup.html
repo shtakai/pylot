@@ -1,0 +1,46 @@
+
+{% extends "Pylot/Login/login-layout.html" %}
+
+{% block login_content %}
+
+            <div class="panel">
+                <div class="panel-heading">
+                    <h2>{{ login_title | default('Signup')}}</h2>
+                </div>
+                <div class="panel-body">
+                    <form method="POST" id="pilot-login-signup-form" action="{{url_for('Login:signup')}}">
+                        <input type="hidden" name="next" value="{{ login_url_next }}">
+
+                        <div class="form-group">
+                            <label>Name:</label>
+                            <input type="text" required class="form-control"  name="name" placeholder="Enter Name">
+                        </div>
+                        <div class="form-group">
+                            <label>Email:</label>
+                            <input type="email" required class="form-control"  name="email" placeholder="Enter email">
+                        </div>
+                        <div class="form-group">
+                            <label>Password:</label>
+                            <input type="password" required class="form-control" name="password" placeholder="Password">
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm Password:</label>
+                            <input type="password" class="form-control" name="password2" placeholder="Confirm Password">
+                        </div>
+
+                        <div class="form-group">
+                            {{recaptcha}}
+                        </div>
+
+                        <button type="submit" id="pilot-login-signup-button" class="btn btn-primary">Signup</button>
+                    </form>
+
+                    <hr>
+
+                    <a href="{{url_for('Login:login', next=login_url_next)}}">Login</a>
+
+                </div>
+            </div>
+
+{% endblock %}
+

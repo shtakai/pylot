@@ -1,0 +1,182 @@
+#----
+{#
+== Form Helpers ==
+
+Macros to create form input, select, radio, checkbox, textarea compatible to BS3
+
+
+::Input: @value
+
+    {{ f.tag('input', 'name', value='John', data={"k":"v", "k":"v"}) }}
+    -> <input name='name' type='text' value='John' data-k='v' data-k='v' class="form-control" />
+
+    {{ f.tag('input', 'fileSelect', type='file') }}
+    -> <input name='fileSelect' type='file' class="form-control" />
+
+::Hidden: @value
+
+    {{ f.tag('hidden', 'name', value='John') }}
+    -> <input name='name' type='hidden' value='John' class="form-control" />
+
+::Textarea: @value
+
+    {{ f.tag('textarea', 'feedback', value='Irving') }}
+    -> <textarea name='feedback' class="form-control" >Irving</textarea>
+
+:: Button: @type, @value
+
+    {{ f.tag('button', 'my_button', type='submit', value='Save')}}
+    -> <button name="my_button" type="submit">Save</button>
+
+    {{ f.tag('button', 'submit', type='submit')}}
+    -> <button name="submit" type="submit">Submit</button>
+
+:: Checkbox: @options=[[k, v], [k, v]], @checked=[]
+
+    {{ f.tag('checkbox', 'test', options=[[1,'Male'], [2,'Female']], checked=[1]) }}
+     <div class='checkbox-group' >
+        <label for='1'  >Male</label>
+        <input name='test' type='checkbox' value='1' checked='checked' />
+     </div>
+    <div class='checkbox-group' >
+        <label for='2'  >Female</label>
+        <input name='test' type='checkbox' value='2'  />
+    </div>
+
+:: Radio: @options=[[k, v], [k, v]], @checked=[]
+
+    {{ f.tag('radio', 'test', options=[[1,'Male'], [2,'Female']], checked=[1]) }}
+     <div class='radio-group' >
+        <label for='1'  >Male</label>
+        <input name='test' type='radio' value='1' checked='checked' />
+     </div>
+    <div class='radio-group' >
+        <label for='2'  >Female</label>
+        <input name='test' type='radio' value='2'  />
+    </div>
+
+:: Select: @options=[[k, v], [k, v]], @selected
+
+    {{ f.tag('select', 'gender', options=[['m', 'Male'], ['f', 'Female']], selected='f') }}
+      <select name="gender">
+        <option value="m">Male</option>
+        <option value="f" selected="selected">Female</option>
+      </select>
+
+:: Select-group: @options=[[k, v], [k, v]], @selected
+
+    {{ f.tag('select-group', 'gender', options={"List of genders": [['m', 'Male'], ['f', 'Female']], ...}, selected='f') }}
+      <select name="gender">
+        <optgroup label="List of Genders">
+            <option value="m">Male</option>
+            <option value="f" selected="selected">Female</option>
+        </optgroup>
+      </select>
+
+#}
+
+{% macro tag(_tag, name) -%}
+    {% set _class = kwargs.pop('class', 'form-control') %}
+    {% set _data_ = kwargs.pop('data', none) %}
+    {% set _data = "" %}
+    {% if _data_ %}
+        {% for _k, _v in _data_.items() %}
+            {% set _data = _data + " data-{{ _k }} =\"{{ _v }}\" " %}
+        {% endfor %}
+    {% endif %}
+    {{ _data }}
+    {# input or hidden field #}
+    {%- if _tag == "input" or _tag == "hidden" -%}
+        {%- set _type = kwargs.pop('type', 'text') %}
+
+        {# Hidden field #}
+        {% if _tag == "hidden" %}
+           {% set _type = "hidden" %}
+        {% endif %}
+        <input name='{{name}}' class="{{_class}}" type='{{_type}}'  {% for key in kwargs %}{{key}}='{{kwargs[key]|safe}}'{% endfor %} />
+
+    {# textarea: @value #}
+    {% elif _tag == "textarea" -%}
+        {% set value = kwargs.pop('value', '') %}
+        <textarea name='{{name}}' class="{{_class}}" {% for key in kwargs %}{{key}}='{{kwargs[key]|safe}}'{% endfor %} >{{value}}</textarea>
+
+    {# button: @text=str, @type=str #}
+    {% elif _tag == "button" -%}
+        {% set _type = kwargs.pop('type', 'button') %}
+        {% set value = kwargs.pop('text', '') %}
+        <button name='{{name}}' class="{{_class}}" type='{{_type}}' {% for key in kwargs %}{{key}}='{{kwargs[key]|safe}}'{% endfor %} >{{ value if text is defined and value != "" else (name|capitalize()) }}</button>
+
+    {# radio|checkbox: @checked=[], @options=[[k, v], [k,v]], @display_inline=bool #}
+    {% elif _tag in ['radio', 'checkbox'] -%}
+        {% set checked = kwargs.pop('checked', []) %}
+        {% set options = kwargs.pop('options', []) %}
+        {% set display_inline = kwargs.pop('display_inline', False) %}
+        {% for item in options %}
+            <div class='{{_tag}}-{% if display_inline %}inline{% else %}group{% endif %}' >
+                <label for="{{ item[0] }}">
+                    <input name='{{name}}' type='{{_tag}}' value='{{item[0]}}' {% if item[0] in checked %}checked='checked'{% endif %} {% for key in kwargs %}{{key}}='{{kwargs[key]|safe}}'{% endfor %}/>
+                    {{ item[1] }}
+                </label>
+            </div>
+        {% endfor %}
+
+
+    {# select: @options=[[k, v], [k, v]], @selected=str #}
+    {%- elif _tag == "select" -%}
+        {% set selected = kwargs.pop('selected', '') %}
+        {% set options = kwargs.pop('options', []) %}
+        <select name='{{name}}' class="{{_class}}" {% for key in kwargs %}{{key}}='{{kwargs[key]|safe}}'{% endfor %} >
+            <option></option>
+            {% for item in options %}
+            <option value='{{item[0]|safe}}' {% if item[0] == default %}selected='selected'{% endif %} >{{item[1] if item[1] is defined else item[0] }}</option>
+            {% endfor %}
+        </select>
+
+
+    {# select-group: @options={"group_name":[[k, v], [k, v]], ... }, @selected=str #}
+    {%- elif _tag == "select-group" -%}
+        {% set selected = kwargs.pop('selected', '') %}
+        {% set groups = kwargs.pop('options', {}) %}
+        <select name='{{name}}' class="{{_class}}" {% for key in kwargs %}{{key}}='{{kwargs[key]|safe}}'{% endfor %} >
+            <option></option>
+            {% for group_name, options in groups.items() -%}
+                <optgroup label="{{ group_name }}">
+                {% for item in options %}
+                    <option value='{{item[0]|safe}}' {% if item[0] == default %}selected='selected'{% endif %} >{{item[1] if item[1] is defined else item[0] }}</option>
+                {% endfor %}
+                </optgroup>
+
+            {%- endfor %}
+        </select>
+
+    {%- endif -%}
+{%- endmacro %}
+
+{#:: Label
+
+    {{ f.label('name', 'First name')  }}
+    -> <label for='name' >First name</label>
+
+    {{ f.label('name') }}
+    -> <label for='name'>Name</label>
+
+    {{ f.label('name', class='label', id='name-label') }}
+    -> <label for='name' class='label' id='name-label' >Name</label>
+#}
+{% macro label(for_name, title) %}
+    <label for='{{for_name}}' {% for key in kwargs %}{{key}}='{{kwargs[key]|safe}}'{% endfor %} >{{ (title) if (title is defined and title != "") else (for_name|capitalize()) }}</label>
+{% endmacro %}
+
+{#:: Form-Group
+
+    Same as tag, except it wrap it in from-group
+#}
+{% macro group(_tag, name) %}
+    {% set _label = kwargs.pop('label', '') %}
+    <div class='form-group'>
+        {{ label(name, _label) }}
+        {{ tag(_tag, name, **kwargs) }}
+    </div>
+{% endmacro %}
+
+

@@ -1,0 +1,70 @@
+/***
+@include breakpoint creates media queries for multiple screen sizes
+
+li {
+    // single breakpoint
+    @include breakpoint(mobile) {
+        //style in here
+    }
+
+    // multiple breakpoint
+    @include breakpoint(mobile, tablet, desktop, wide) {
+        //style in here
+    }
+}
+**/
+table.pylot-admin thead th {
+  font-size: 16px; }
+table.pylot-admin tbody td {
+  font-size: 14px; }
+
+.link {
+  cursor: pointer; }
+
+#PostManager .header {
+  border-bottom: 5px solid #ccc;
+  margin-bottom: 20px; }
+  #PostManager .header:before, #PostManager .header:after {
+    content: " ";
+    display: table; }
+  #PostManager .header:after {
+    clear: both; }
+#PostManager .page-title {
+  font-size: 32px;
+  padding-bottom: 10px; }
+#PostManager ul.menu {
+  margin: 0px;
+  border: 0px;
+  list-style: none; }
+  #PostManager ul.menu:before, #PostManager ul.menu:after {
+    content: " ";
+    display: table; }
+  #PostManager ul.menu:after {
+    clear: both; }
+  #PostManager ul.menu li {
+    height: 40px;
+    line-height: 40px;
+    float: left;
+    margin-left: 10px; }
+#PostManager .block-title {
+  font-size: 18px;
+  border-bottom: 1px dotted #ccc;
+  padding-bottom: 2px;
+  margin-bottom: 5px;
+  margin-top: 30px; }
+#PostManager .page-category ul.list,
+#PostManager .page-type ul.list {
+  list-style: none;
+  margin: 0px;
+  padding: 0px; }
+  #PostManager .page-category ul.list li,
+  #PostManager .page-type ul.list li {
+    border-bottom: 1px dotted #ccc;
+    padding: 10px;
+    margin: 10px;
+    cursor: pointer; }
+    #PostManager .page-category ul.list li span,
+    #PostManager .page-type ul.list li span {
+      font-style: italic; }
+
+/*# sourceMappingURL=post-manager.css.map */

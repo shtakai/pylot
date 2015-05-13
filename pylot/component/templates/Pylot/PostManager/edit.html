@@ -1,0 +1,148 @@
+{% import "Pylot/macros/base.html" as m with context %}
+{% import "Pylot/macros/forms.html" as f with context %}
+{% extends "Pylot/PostManager/layout.html" %}
+
+{% block page_title %}Writer{% endblock %}
+
+{% block content %}
+
+{% if post and post.is_draft %}
+    {{ m.alert("This post is a draft and is not yet published", category="warning", dismissible=False) }}
+{% endif %}
+
+{% if post %}
+<div class="row">
+    <div class="col-md-12">
+        <a href="{{ url_for("PostManager:read", id=post.id) }}" class="btn  pull-right"><i class="fa fa-eye"></i> View Post</a>
+    </div>
+</div>
+{% endif %}
+
+<div class="row">
+    <div class="col-md-12">
+
+        <form id="form-post-edit" method="POST" action="{{ url_for('PostManager:post') }}">
+            <input type="hidden" name="status" value="">
+            <input type="hidden" name="id" value="{% if post and post.id > 0 %}{{ post.id }}{% endif %}">
+
+            {{ f.tag("input", name="title", placeholder="Your Post Title", value=post.title if post else "") }}
+
+            {% include "Pylot/PostManager/mdeditor.html" %}
+
+            <div class="block-title">// Post Meta</div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <label>Post Slug</label>
+                                <input type="text"
+                                       name="slug"
+                                       value="{% if post %}{{ post.slug }}{% endif %}"
+                                       id="input-slug"
+                                       data-live-update="true" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="panel panel-default">
+                      <div class="panel-heading">Post Types</div>
+                        <div class="panel-body">
+                            {{ f.tag('radio', 'type_id', options=types, checked=[post.type_id if post else 0]) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="panel panel-default">
+
+                      <div class="panel-heading">
+                          <div class="pull-left">Post Categories</div>
+                          <div class="pull-right add-more-category link"
+                                data-toggle="modal"
+                                data-target="#modal-insert-cat-inline"
+                                  ><i class="fa fa-plus"></i> Add</div>
+                          <div class="clearfix"></div>
+                      </div>
+                        <div class="panel-body post-categories-list">
+                            {{ f.tag('checkbox', 'post_categories', options=categories, checked=checked_categories) }}
+                        </div>
+
+                        <div class="">
+
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="panel panel-default">
+
+                      <div class="panel-heading">Post Info</div>
+
+                            <table class="table">
+                                <tr>
+                                    <td>Status</td>
+                                    <td>{% if post %}{{ post.status }}{% endif %}</td>
+                                </tr>
+                                <tr>
+                                    <td>Published Date</td>
+                                    <td>{% if post %}{{ post.published_date }}{% endif %}</td>
+                                </tr>
+                                <tr>
+                                    <td>Creation Date</td>
+                                    <td>{% if post %}{{ post.created_at }}{% endif %}</td>
+                                </tr>
+                                <tr>
+                                    <td>Is Public</td>
+                                    <td>{% if post %}{{ post.is_public | bool_to_yes }}{% endif %}</td>
+                                </tr>
+                            </table>
+
+
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="">
+                <div id="btn-draft-post" data-action="draft" class="btn btn-lg btn-warning action-btn"><i class="fa fa-archive"></i> Save as Draft</div>
+                <div id="btn-publish-post" data-action="publish" class="btn btn-lg btn-success action-btn"><i class="fa fa-cloud-upload"></i> Save & Publish</div>
+                <div id="btn-delete-post" data-action="delete" class="btn btn-lg btn-danger pull-right  action-btn"><i class="fa fa-trash"></i> Trash it</div>
+            </div>
+        </form>
+
+    </div>
+
+</div>
+
+<div class="modal fade" tabindex="-1" id="modal-insert-cat-inline" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <form method="POST" action="{{url_for('PostManager:categories')}}">
+        <input type="hidden" name="ajax" value="1">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="myModalLabel">Add New Category</h4>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" class="form-control"  name="name" placeholder="Name" value="">
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-success save-button"><i class="fa fa-check"></i> SAVE</button>
+          </div>
+        </div>
+      </form>
+  </div>
+</div>
+{% endblock %}

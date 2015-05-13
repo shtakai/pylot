@@ -1,0 +1,70 @@
+
+{% extends "Pylot/Login/login-layout.html" %}
+{% import "Pylot/macros/base.html" as m with context %}
+{% import "Pylot/macros/forms.html" as f with context %}
+{% block login_content %}
+
+    <div class="panel">
+        <div class="panel-heading">
+            <h2>{{ login_title | default('Login')}}</h2>
+        </div>
+
+        <div class="panel-body">
+
+
+        {% if __.LOGIN_OAUTH_BUTTONS %}
+            <div class="text-center">
+
+                <form class="pylot-form-auth-login"
+                      method="POST"
+                      action="{{ url_for('Login:oauth_login') }}">
+                    {{- f.tag("hidden", "provider") -}}
+                    {{- f.tag("hidden", "provider_user_id") -}}
+                    {{- f.tag("hidden", "name") -}}
+                    {{- f.tag("hidden", "email") -}}
+                    {{- f.tag("hidden", "image_url") -}}
+                    {{- f.tag("hidden", "next", value=login_url_next) -}}
+
+                    <div class="status-message"></div>
+
+                    {{ m.oauth_login_buttons(__.LOGIN_OAUTH_BUTTONS, size="md") }}
+                </form>
+
+                <hr>
+            </div>
+        {% endif %}
+
+
+            <form method="POST" id="pylot-login-login-form" action="{{ url_for('Login:email_login') }}">
+                <input type="hidden" name="next" value="{{ login_url_next }}">
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" required class="form-control"  name="email" placeholder="Enter email">
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" required class="form-control" name="password" placeholder="Password">
+                </div>
+
+                <button type="submit" id="pilot-login-login-button" class="btn btn-primary">Login</button>
+            </form>
+
+            <hr>
+
+            {% if __.LOGIN_SIGNUP_ENABLE %}
+                <a class=" pull-left"  href="{{url_for('Login:signup', next=login_url_next)}}">Signup</a>
+            {% endif %}
+
+            <a class="pull-right" href="{{url_for('Login:lost_password')}}">Lost Password</a>
+            <div class="clearfix"></div>
+
+        </div>
+
+    </div>
+
+
+{% endblock %}
+
+
+
+

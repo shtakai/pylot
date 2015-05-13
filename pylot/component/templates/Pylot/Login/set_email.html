@@ -1,0 +1,27 @@
+
+{% extends "Pylot/Login/login-layout.html" %}
+
+{% block login_content %}
+
+    <div class="panel">
+        <div class="panel-heading">
+            <h2>{{ login_title | default('Set Email')}}</h2>
+        </div>
+
+            <form method="POST" action="{{ url_for('Login:set_email') }}">
+                <input type="hidden" name="next" value="{{ login_url_next }}">
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" required class="form-control"  name="email" placeholder="Enter email">
+                </div>
+                <button type="submit" class="btn btn-primary">Create </button>
+            </form>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+
+

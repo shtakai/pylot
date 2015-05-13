@@ -1,0 +1,51 @@
+
+{% assets
+    "pylot/css/components/post-manager.css"
+-%}
+<link href="{{ ASSET_URL }}" rel="stylesheet">
+{% endassets -%}
+<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic' rel='stylesheet' type='text/css'>
+
+
+
+<div id="PostManager" class="">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="header">
+                    <div class="pull-left">
+                        <div class="page-title">Post // {% block page_title %}{% endblock %}</div>
+                    </div>
+                    <div class="pull-right">
+                        <ul class="menu">
+                            <li><a href="{{ url_for('PostManager:index') }}"><i class="fa fa-"></i>All Posts</a></li>
+                            <li><a href="{{ url_for('PostManager:new') }}">New Post</a></li>
+                            <li><a href="{{ url_for('PostManager:categories') }}">Categories</a></li>
+                            <li><a href="{{ url_for('PostManager:types') }}">Types</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+
+
+
+                {% block content %}{% endblock %}
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+{% assets
+        "pylot/js/vendor/jquery-slugify.js",
+        "pylot/js/components/post-manager.js"
+-%}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+{% endassets -%}

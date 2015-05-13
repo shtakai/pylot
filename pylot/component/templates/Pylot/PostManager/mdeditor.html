@@ -1,0 +1,68 @@
+
+{% assets  "pylot/vendor/mdeditor/mdeditor.css" -%}
+    <link href="{{ ASSET_URL }}" rel="stylesheet">
+{% endassets -%}
+
+{% assets output="_mdeditor.js",
+    "pylot/vendor/mdeditor/bower_components/marked/marked.min.js",
+    "pylot/vendor/mdeditor/bower_components/dropzone/downloads/dropzone.min.js",
+    "pylot/vendor/mdeditor/bower_components/underscore/underscore-min.js",
+    "pylot/vendor/mdeditor/bower_components/codemirror/lib/codemirror.js",
+    "pylot/vendor/mdeditor/mdeditor.js" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+{% endassets -%}
+
+
+<div>
+    <textarea name="content" id="mdeditor" class="form-control">{% if post %}{{ post.content | safe }}{% endif %}</textarea>
+</div>
+
+
+
+
+<script>
+    $(function(){
+          var md = new MdEditor('#mdeditor', {
+            uploader: '{{ url_for("PostManager:upload_to_storage") }}',
+            images: [
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/1'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/2'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/3'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/4'},              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/1'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/2'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/3'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/4'},              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/1'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/2'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/3'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/4'},              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/1'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/2'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/3'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/4'},              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/1'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/2'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/3'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/4'},              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/1'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/2'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/3'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/4'},              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/1'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/2'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/3'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/4'},              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/1'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/2'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/3'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/4'},              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/1'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/2'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/3'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/4'},              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/1'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/2'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/3'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/4'},              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/1'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/2'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/3'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/4'},              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/1'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/2'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/3'},
+              {id: '1.jpg', url: 'http://lorempicsum.com/futurama/200/200/4'},
+            ]
+          });
+    })
+</script>

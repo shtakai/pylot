@@ -1,3 +1,5 @@
+0.2.1
+    - remove cookies. Should use, session
 
 0.2.0
     - Use __ (double underscore) as global variable setter and getter

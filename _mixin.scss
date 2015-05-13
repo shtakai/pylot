@@ -1,0 +1,187 @@
+// _mixin.scss
+
+$font : "Lato", sans-serif;
+
+// Text Colors
+$text-color: #111;
+$text-light-color: #B9B9B9;
+$text-lighter-color: #fff;
+$text-dark-color: #1E1E1E;
+$text-darker-color: #111;
+
+// Size
+$size-xxl: 4.4em;
+$size-xl: 3.4em;;
+$size-lg: 2.25em;
+$size-md: 1.5em; // When in doubt, use $size-md
+$size-sm: 1em;
+$size-xs: 0.9em;
+
+// Breakpoints
+$breakpoints_map: (
+  mobile:  320px,
+  tablet:  740px,
+  desktop: 980px,
+  wide:    1300px,
+);
+
+//--------
+
+// To add clearfix to element
+@mixin clearfix {
+    &:before,
+    &:after {
+        content: " ";
+        display: table;
+    }
+    &:after {
+        clear: both
+    }
+}
+
+// Responsive image
+@mixin responsive-image {
+    img {
+        display: inline-block;
+        height: auto;
+        max-width: 100%;
+    }
+}
+
+
+
+/***
+@include breakpoint creates media queries for multiple screen sizes
+
+li {
+    // single breakpoint
+    @include breakpoint(mobile) {
+        //style in here
+    }
+
+    // multiple breakpoint
+    @include breakpoint(mobile, tablet, desktop, wide) {
+        //style in here
+    }
+}
+**/
+
+@mixin breakpoint($breakpoints...) {
+    @each $breakpoint in $breakpoints {
+        $value: map-get($breakpoints_map, $breakpoint);
+        @if $value != null {
+          @media (min-width: $value) {
+            @content;
+          }
+        }
+        @else {
+          @warn "Unfortunately, no value could be retrieved from `#{$breakpoint}`. "
+              + "Please make sure it is defined in `$breakpoints_map` map.";
+        }
+    }
+}
+
+// Circle image. ie: avatar, profile pic
+@mixin circle-image($size:100px, $border-color:#1e1e1e, $border-color2:#ccc) {
+    border: solid 2px $border-color;
+    border-left-color:$border-color2;
+    padding:2px;
+    display:inline-block;
+    border-radius: 50%;
+    position:relative;
+    transform:rotate(45deg);
+    -ms-transform:rotate(45deg);
+    -webkit-transform:rotate(45deg);
+
+    img{
+        width: $size;
+        height: $size;
+        display:block;
+        border-radius: 50%;
+        transform:rotate(-45deg);
+        -ms-transform:rotate(-45deg);
+        -webkit-transform:rotate(-45deg);
+    }
+    &:before, &:after{
+        content:'';
+        position:absolute;
+        background:#fff;
+        z-index:-1;
+
+        transform:rotate(-45deg);
+        -ms-transform:rotate(-45deg);
+        -webkit-transform:rotate(-45deg);
+    }
+    &:before{
+        height:4px;
+        top:50%;
+        left:2px; right:-5px;
+        margin-top:-2px;
+    }
+    &:after{
+        width:4px;
+        left:50%;
+        top:2px; bottom:-5px;
+        margin-left:-2px;
+    }
+}
+
+// Text manipulation
+@mixin text-uppercase() {
+    text-transform: uppercase;
+}
+
+@mixin text-lowercase() {
+    text-transform: lowercase;
+}
+
+@mixin text-capitalize() {
+    text-transform: capitalize;
+}
+
+@mixin font-text {
+    font-family: $font;
+    font-weight: 300;
+}
+
+
+// Responsive Text. Best with $breakpoint
+@mixin responsive-text($size) {
+    @include font-text;
+    line-height: 1.6em;
+
+    @include breakpoint(mobile) {
+        font-size: $size * 0.8;
+    }
+    @include breakpoint(tablet) {
+        font-size: $size * 0.9;
+    }
+    @include breakpoint(desktop) {
+        font-size: $size * 1.0;
+    }
+    @include breakpoint(wide) {
+        font-size: $size * 1.1;
+    }
+}
+
+// Text Size and Color
+@mixin text($size, $color: $text-dark-color) {
+    color: $color;
+    @include responsive-text($size);
+}
+
+@mixin text-light($size) {
+    @include text($size, $text-light-color)
+}
+
+@mixin text-dark($size) {
+    @include text($size, $text-dark-color)
+}
+
+@mixin text-darker($size) {
+    @include text($size, #text-darker-color)
+}
+
+@mixin text-lighter($size) {
+    @include text($size, $text-lighter-color)
+}

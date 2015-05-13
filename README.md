@@ -26,6 +26,24 @@ The extension also provides pre-made templates for error pages and macros.
 - [Project Assets](#assets)
 - [Command Line](#cammand-line)
 
+
+- Features
+    - Login
+        - Login
+        - Logout
+        - Signup
+        - Lost Password
+        - Password Reset
+    - User Manager
+    - Contact
+    - Maintenance
+    - Post
+        - blog
+        - article
+    - File Manager
+    
+    Storage: S3 or Local
+    
 ---
 
 <a name="about"></a>

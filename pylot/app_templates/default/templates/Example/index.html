@@ -1,0 +1,9 @@
+
+{% import "Pylot/macros/base.html" as m with context %}
+
+<h1>Dismissible Alerts</h1>
+
+{{ m.alert("Alert message Info", category="info", dismissible=True) }}
+
+{{ m.alert("Alert message Info", category="error", dismissible=True) }}
+

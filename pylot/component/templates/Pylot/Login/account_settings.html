@@ -1,0 +1,136 @@
+
+{% extends "Pylot/Login/login-layout.html" %}
+{% import "Pylot/macros/base.html" as m with context %}
+{% import "Pylot/macros/forms.html" as f with context %}
+
+{% block login_content %}
+            <h2>{{ login_title | default('Account Settings')}}</h2>
+
+            <div role="tabpanel">
+
+              <!-- Nav tabs -->
+              <ul class="nav nav-tabs" role="tablist">
+                <li  class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Edit Name & Photo</a></li>
+                <li><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Login Info</a></li>
+                <li><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Change Password</a></li>
+              </ul>
+
+              <!-- Tab panes -->
+              <div class="tab-content">
+
+                <div role="tabpanel" class="tab-pane active" id="home">
+
+                        <input type="hidden" id="profile-pic-url" name="profile_pic_url" value="" />
+                        <div class="col-md-6">
+                            <form method="POST" action="{{url_for('Login:change_info')}}">
+                                <h3>Edit Name</h3>
+                                <div class="form-group">
+                                    <input type="text" class="form-control"  name="name" value="{{current_user.name}}" placeholder="Name">
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Save</button>
+
+                            </form>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h3>Change Profile Picture</h3>
+
+                            <div class="s3-upload-profile-pic-preview profile-pic-avatar size-150">
+                                <img src="{{ current_user.profile_pic_url }}"  />
+                            </div>
+
+                            <input s3:upload
+                                   type="file"
+                                   id="profile-pic"
+                                   data-id="profile-pic"
+                                   data-filename-prefix="user/profile-pic/{{ current_user.id }}"
+                                   data-type="image"
+                                   data-s3-url="{{ url_for('Login:sign_s3_upload') }}"
+                                   data-update-url="{{ url_for('Login:change_profile_pic') }}"
+                                   data-update-name="profile_pic_url"
+                                   data-status="#upload-status"
+                                   data-preview=".s3-upload-profile-pic-preview"
+                            >
+                            <div id="upload-status"></div>
+
+                        </div>
+
+                    </form>
+                </div>
+
+                <div role="tabpanel" class="tab-pane" id="profile">
+
+                    {% if __.LOGIN_OAUTH_BUTTONS %}
+                        <h4>Social Login</h4>
+                        <div class="text-center">
+
+                            <form class="pilot-form-auth-login"
+                                  method="POST"
+                                  action="{{ url_for('Login:oauth_connect') }}"
+                                  data-success-message="Linking your account..."
+                                  data-error-message="Unable to link your account"
+                                    >
+                                {{- f.tag("hidden", "provider") -}}
+                                {{- f.tag("hidden", "provider_user_id") -}}
+                                {{- f.tag("hidden", "name") -}}
+                                {{- f.tag("hidden", "email") -}}
+                                {{- f.tag("hidden", "image_url") -}}
+                                {{- f.tag("hidden", "next", value=login_url_next) -}}
+
+                                <div class="status-message"></div>
+
+                                {{ m.oauth_login_buttons(__.LOGIN_OAUTH_BUTTONS, size="md", text="Connect #provider to account") }}
+                            </form>
+
+                            <hr>
+                        </div>
+                    {% endif %}
+
+                    <h4>Email Login</h4>
+                    <form method="POST" action="{{url_for('Login:change_login')}}">
+
+                        <div class="form-group">
+                            <label>Change Email:</label>
+                            <input type="email" class="form-control"  name="email" value="{{current_user.email}}" placeholder="Email">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Verify Current Password:</label>
+                            <input type="password" class="form-control"  name="confirm-password" placeholder="Current Password">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+
+
+                <div role="tabpanel" class="tab-pane" id="messages">
+
+                    <form method="POST" action="{{url_for('Login:change_password')}}">
+
+                        <h3>Change Password</h3>
+
+                        <div class="form-group">
+                            <label>Old Password:</label>
+                            <input type="password" class="form-control"  name="confirm-password"  placeholder="Old Password">
+                        </div>
+
+                        <div class="form-group">
+                            <label>New Password:</label>
+                            <input type="password" class="form-control" name="password" placeholder="New Password">
+                        </div>
+                        <div class="form-group">
+                            <label>Retype New Password:</label>
+                            <input type="password" class="form-control" name="password2" placeholder="Retype New Password">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+              </div>
+            </div>
+
+
+{% endblock %}
+

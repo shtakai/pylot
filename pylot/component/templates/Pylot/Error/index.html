@@ -1,0 +1,13 @@
+
+<div class="alert
+        {% if error.code in [404, 500, 503] %}
+            alert-danger
+        {% else %}
+            alert-warning
+        {% endif %}
+    alert-warning"
+        >
+    <h3>Error {{ error }}</h3>
+
+    <h2>{{ error.description }}</h2>
+</div>

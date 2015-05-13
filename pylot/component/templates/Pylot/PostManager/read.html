@@ -1,0 +1,32 @@
+{% import "Pylot/macros/base.html" as m with context %}
+{% import "Pylot/macros/forms.html" as f with context %}
+{% extends "Pylot/PostManager/layout.html" %}
+
+{% block page_title %}Reader{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-12">
+                    <a href="{{ url_for("PostManager:index") }}" class="btn btn-default"><i class="fa fa-arrow-left"></i></a>
+                    <a href="{{ url_for("PostManager:edit", id=post.id) }}" class="btn btn-primary"><i class="fa fa-pencil"></i> Edit</a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1>{{ post.title }}</h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-offset-2 col-md-8">
+                {{ post.content | markdown | safe }}
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
