@@ -1,5 +1,7 @@
 # Flask-Pilot
 
+[![GuardRails badge](https://badges.production.guardrails.io/shtakai/pylot.svg)](https://www.guardrails.io)
+
 **Flask-Pilot** is a Flask extension that adds structure to both your views and
 templates, by mapping them to each other to provide a rapid application development framework.
 The extension also comes with Flask-Classy, Flask-Assets, Flask-Mail,
