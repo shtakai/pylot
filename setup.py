@@ -58,7 +58,7 @@ setup(
     include_package_data=True,
     packages=find_packages(),
     install_requires=[
-        'Flask==0.10.1',
+        'Flask==3.1.3',
         'Flask-Classy==0.6.10',
         'Flask-Assets==0.10',
         'flask-recaptcha==0.3',
