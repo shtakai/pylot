@@ -76,7 +76,7 @@ setup(
         'humanize==0.5.1',
         'redis==2.9.1',
         'ses-mailer==0.12.0',
-        'mistune==0.5.1',
+        'mistune==3.2.1',
         'wrapt==1.10.4',
     ],
 
